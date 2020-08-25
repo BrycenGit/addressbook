@@ -10,7 +10,17 @@
 </head>
 <body>
   <div class="container">
-    <h1>Address Book</h1>
+    <h1 id="bookHeader">Address Book</h1>
+    <div class="row">
+      <form id='address-add'>
+        <div class="form-group">
+          <label for="new-address-book">Enter a name for a new address book: </label>
+          <input type="text"  class="form-control" required id="new-address-book">
+          <button type='submit' class="btn-primary" id="add-button">add</button>
+          <button class="btn-primary" id="next-button">next</button>
+        </div>
+      </form>
+    </div>
     <div class="row">
       <div class="col-md-6">
         <hr>
@@ -18,7 +28,7 @@
         <form id="new-contact">
           <div class="form-group">
             <label for="new-first-name">First Name</label>
-            <input type="text"  class="form-control" id="new-first-name">
+            <input type="text"  class="form-control" required id="new-first-name">
           </div>
           <div class="form-group">
             <label for="new-last-name">Last Name</label>
@@ -54,7 +64,7 @@
       <div class="col-md-6">
         <div id="show-contact">
           <p>First Name: <span class="first-name"></span></p>
-          <p>Last Name: <span class="last-name"></span></p>
+          <p id = "lastname">Last Name: <span class="last-name"></span></p>
           <p>Phone Number: <span class="phone-number"></span></p>
           <p id='work-email-id'>Work Email: <span class="work-email"></span></p>
           <p id="personal-email-id">Personal Email: <span class="personal-email"></span></p>

@@ -1,7 +1,31 @@
+let BOOKS = []; //global array of address book object
+let ADDRESSBOOKINDEX = 0; 
+function nextAddressBook() {
+  if(ADDRESSBOOKINDEX + 1 < BOOKS.length){
+    ADDRESSBOOKINDEX++;
+  } else {
+    ADDRESSBOOKINDEX = 0;
+  }
+}
+function addNewAddressBook(name){
+  if(name) {
+    BOOKS.push(new AddressBook(name));
+    return true;
+  } else {
+    return false;
+  }
+  
+}
+
 // Business Logic for AddressBook ---------
 function AddressBook() {
   this.contacts = [],
   this.currentId = 0
+}
+function AddressBook(name) {
+  this.contacts = [],
+  this.currentId = 0
+  this.name = name;
 }
 
 AddressBook.prototype.addContact = function(contact) {
@@ -58,7 +82,8 @@ Contact.prototype.fullName = function() {
 }
 
 // User Interface Logic ---------
-let addressBook = new AddressBook();
+//let addressBook = new AddressBook();
+addNewAddressBook('Personal');
 
 function displayContactDetails(addressBookToDisplay) {
   let contactsList = $("ul#contacts");
@@ -70,7 +95,7 @@ function displayContactDetails(addressBookToDisplay) {
 };
 
 function showContact(contactId) {
-  const contact = addressBook.findContact(contactId);
+  const contact = BOOKS[ADDRESSBOOKINDEX].findContact(contactId);
   $("#show-contact").show();
   $(".first-name").html(contact.firstName);
   $(".last-name").html(contact.lastName);
@@ -80,11 +105,14 @@ function showContact(contactId) {
   $(".home-address").html(contact.address.homeAddress);
   $(".work-address").html(contact.address.workAddress);
 
+  //$("#lastname").remove(".last-name");
+
  // $('#show-contact').not('.first-name').html('not first name');
   if (contact.address.workEmail) {
-    $("#work-email-id").show();
+     $("#work-email-id").show();
   }else {
     $("#work-email-id").hide();
+    //$('p').remove('#work-email-id');
   }
   if (contact.address.personalEmail) {
     $("#personal-email-id").show();
@@ -111,14 +139,46 @@ function attachContactListeners() {
     showContact(this.id);
   });
   $("#buttons").on("click", ".deleteButton", function() {
-    addressBook.deleteContact(this.id);
+    BOOKS[ADDRESSBOOKINDEX].deleteContact(this.id);
     $("#show-contact").hide();
-    displayContactDetails(addressBook);
+    displayContactDetails(BOOKS[ADDRESSBOOKINDEX]);
   });
+
+  
+  // $('ul#contacts').hover("li",function() {
+  //   showContact($(this.id).fadeIn( 500 ));
+  //   $(this).fadeOut( 100 ); 
+  // });
+  $('ul#contacts').on('mouseenter', 'li', function () {
+    $(this).css('background-color', 'black');
+    $(this).css('color', 'white');
+    $(this).css('cursor', 'no-drop');
+  });
+  $('ul#contacts').on('mouseleave', 'li', function () {
+    $(this).css('background-color', 'inherit');
+    $(this).css('color', 'inherit');
+    $(this).css('cursor', 'inherit');
+  });
+
+  
 };
+
+
+function resetInputs () {
+  $("input#new-first-name").val("");
+  $("input#new-last-name").val("");
+  $("input#new-phone-number").val("");
+  $("input#new-personal-email").val("");
+  $("input#new-work-email").val("");
+  $("input#new-home-address").val("");
+  $("input#new-work-address").val("");
+}
+
+
 
 $(document).ready(function() {
   attachContactListeners();
+  $('#bookHeader').text(BOOKS[ADDRESSBOOKINDEX].name + ' address book');
   $("form#new-contact").submit(function(event) {
     event.preventDefault();
     const inputtedFirstName = $("input#new-first-name").val();
@@ -128,16 +188,21 @@ $(document).ready(function() {
     const inputtedPersonalEmail = $("input#new-personal-email").val();
     const inputtedHomeAddress = $("input#new-home-address").val();
     const inputtedWorkAddress = $("input#new-work-address").val();
-    $("input#new-first-name").val("");
-    $("input#new-last-name").val("");
-    $("input#new-phone-number").val("");
-    $("input#new-personal-email").val("");
-    $("input#new-work-email").val("");
-    $("input#new-home-address").val("");
-    $("input#new-work-address").val("");
+    resetInputs();
     let newAddress = new Address(inputtedWorkEmail, inputtedPersonalEmail, inputtedWorkAddress, inputtedHomeAddress);
     let newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, newAddress);
-    addressBook.addContact(newContact);
-    displayContactDetails(addressBook);
-  })
+    BOOKS[ADDRESSBOOKINDEX].addContact(newContact);
+    displayContactDetails(BOOKS[ADDRESSBOOKINDEX]);
+  });
+  $('#address-add').submit(function () {
+    const newAddresBookName = $("input#new-address-book").val();
+    addNewAddressBook(newAddresBookName);
+    $("input#new-address-book").val('');
+  });
+  $('#next-button').click(function () {
+    nextAddressBook();
+    displayContactDetails(BOOKS[ADDRESSBOOKINDEX]);
+    $('#show-contact').hide();
+    $('#bookHeader').text(BOOKS[ADDRESSBOOKINDEX].name + ' address book');
+  });
 })
