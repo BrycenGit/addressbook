@@ -2,6 +2,6 @@
 
 #### _Aug 24 2020_
 
-#### By Josepth Niles  - Alma Frankenstein -  Natlaie Murphy _****_
+#### By Josepth Niles  - Brycen Bartolome -  Natlaie Murphy _****_
 
 # Adress book demonstrating constructors and .prototype methods 
