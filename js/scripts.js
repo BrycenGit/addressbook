@@ -195,14 +195,16 @@ $(document).ready(function() {
     displayContactDetails(BOOKS[ADDRESSBOOKINDEX]);
   });
   $('#address-add').submit(function () {
+    event.preventDefault();
     const newAddresBookName = $("input#new-address-book").val();
     addNewAddressBook(newAddresBookName);
     $("input#new-address-book").val('');
   });
   $('#next-button').click(function () {
+    event.preventDefault();
     nextAddressBook();
     displayContactDetails(BOOKS[ADDRESSBOOKINDEX]);
     $('#show-contact').hide();
     $('#bookHeader').text(BOOKS[ADDRESSBOOKINDEX].name + ' address book');
   });
-})
+});
